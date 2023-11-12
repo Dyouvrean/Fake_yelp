@@ -1,22 +1,18 @@
 import './App.css';
 import React,{useState,useEffect} from 'react';
+import HomePage from './Pages/HomePage/HomePage';
+import { Routes,Route} from 'react-router-dom';
+
+
 
 function App() {
-  const [data,setData] = useState([{}])
-  const [review,setReview]= useState([{}])
-  useEffect(()=>{
-    fetch("/members").then(
-      res=>res.json()
-    ).then(
-      data=>{setData(data)
-      console.log(data)
-    }
-    )
-  },[])
+  
 
   return (
    <div>
-
+      <Routes>
+          <Route path='/' element = {<HomePage/>}/>
+      </Routes>
    </div>
   );
 }
