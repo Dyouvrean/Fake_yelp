@@ -1,0 +1,8 @@
+yelp_dataset_business.db
+yelp_dataset_checkin.db
+yelp_dataset_reviews.db
+yelp_dataset_tips.db
+yelp_dataset_users.db
+server/__pycache__
+server/venv
+
