@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useStyles } from "./style";
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+
 import {FaSearch} from "react-icons/fa";
 import "./Searchbar.css"
 import axios from 'axios';
@@ -16,6 +16,7 @@ const Home = () => {
   const [loading,setload] = useState(true)
   const [business_list, setbusiness_list] = useState([])
   const [state,setstate] = useState("")
+  const [star,setstar] = useState("")
 
 
 
@@ -42,15 +43,19 @@ const Home = () => {
   const handleState =(value)=>{
     setstate(value);
   }
-
+  const handleStar =(value)=>{
+    setstar(value);
+  }
   const handleSearch = async (event)=>{
     event.preventDefault();
     const data = {
       name: input,
-      state: state
+      state: state,
+      star:star
     };
     setInput("")
     setstate("")
+    setstar("")
     setopt({})
     return APIService.Search_bus(data).then((res)=>setbusiness_list(res.data));
 }
@@ -75,6 +80,11 @@ const Home = () => {
                value={state}
                onChange={(e)=>handleState(e.target.value)}
             />
+            <input className={classes.input}
+               placeholder="Enter star" 
+               value={star}
+               onChange={(e)=>handleStar(e.target.value)}
+            />
             <button type="submit" className={classes.button} onClick={handleSearch} >
                             Search
             </button>
@@ -88,8 +98,12 @@ const Home = () => {
           </div>
           <div className='card-wrapper'>
           {business_list.map((result)=>{
-            console.log(result)
-            return <CustCard Business_name = {result.name} state={result.state} stars ={result.stars} categories={result.categories}/>
+            console.log(result.business_id)
+            return <CustCard Business_name = {result.name} 
+                             state={result.state} 
+                             stars ={result.stars} 
+                             categories={result.categories} 
+                             Business_id={result.business_id}/>
           })
           }
           </div>

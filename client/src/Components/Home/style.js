@@ -36,12 +36,6 @@ export const useStyles = createUseStyles({
         color:'#FFFFFF'
 
     },
-    coinContainers:{
-        display:'grid',
-        gridTemplateColumns:'auto auto auto auto',
-        width: '100%',
-        background:'rgb(255,255,255)'
-    },
     // .bgimg{
     //     background-image:('/opt/front/react-app-master/src/images/bg.jpeg"');
     // }

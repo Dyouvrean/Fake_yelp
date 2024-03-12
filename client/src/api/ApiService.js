@@ -26,6 +26,18 @@ export default class APIService{
         })
     }
 
+    static Get_business_detail(body){
+        return axios.post(`http://localhost:5000/Detail`,
+        JSON.stringify(body),
+        {
+            'method':'POST',
+             headers : {
+            'Content-Type':'application/json'
+            },
+      
+        })
+    }
+
 
 
 }

@@ -32,8 +32,7 @@ def business_name():
 def business_list():
     business = request.json['name']
     state = request.json['state']
-    print(business)
-    print(state)
+    star = request.json['star']
     with sql.connect('yelp_dataset_business.db') as conn:
     # Prepare the query with placeholders for parameters
         query = """
@@ -49,13 +48,26 @@ def business_list():
         params.append(business)
     if state :
         query += " AND state = ?"
-        params.append(state)
+        params.append(state.upper())
+    if star :
+        query += " AND stars > ?"
+        params.append(star)
 
     res = pd.read_sql(query, conn, params=params)
     return res.to_json(orient='records')
 
 
-
+@app.route("/Detail", methods=["POST","GET"])
+def business_detail():
+    businessID = request.json['BusId']
+    with sql.connect('yelp_dataset_business.db') as conn:
+        query = """
+            SELECT *
+            FROM business
+            WHERE business_id = ?
+            """
+    res = pd.read_sql(query, conn, params=(businessID,))
+    return res.to_json(orient='records')
 
 
 
