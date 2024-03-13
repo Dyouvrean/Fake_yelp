@@ -67,6 +67,11 @@ def business_detail():
             WHERE business_id = ?
             """
     res = pd.read_sql(query, conn, params=(businessID,))
+    res.is_open = res.is_open.astype(int)
+    res["review_count"]= res["review_count"].astype(int)
+    res['attributes']= res['attributes'].apply(lambda x: eval(x) if x else None)
+    res['hours']= res['hours'].apply(lambda x: eval(x) if x else None)
+
     return res.to_json(orient='records')
 
 
