@@ -71,8 +71,33 @@ def business_detail():
     res["review_count"]= res["review_count"].astype(int)
     res['attributes']= res['attributes'].apply(lambda x: eval(x) if x else None)
     res['hours']= res['hours'].apply(lambda x: eval(x) if x else None)
-
     return res.to_json(orient='records')
+
+
+@app.route("/Business_review", methods=["POST","GET"])
+def business_review():
+    businessID = request.json['BusId']
+    with sql.connect('yelp_dataset_reviews.db') as conn:
+        query = """
+            SELECT *
+            FROM reviews
+            WHERE business_id = ?
+            """
+    res = pd.read_sql(query, conn, params=(businessID,))
+    ID_ls = res["user_id"]
+
+    with sql.connect('yelp_dataset_users.db') as conn:
+        placeholders = ','.join('?' * len(ID_ls)) 
+        query = f"""
+            SELECT name,user_id
+            FROM users
+            WHERE user_id in ({placeholders})
+            """
+    names = pd.read_sql(query, conn, params=tuple(ID_ls))
+    merged_df = pd.merge(names, res, on='user_id', how='inner')
+    print(merged_df)
+    return merged_df.to_json(orient='records')
+
 
 
 

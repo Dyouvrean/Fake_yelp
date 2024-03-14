@@ -5,6 +5,7 @@ import {FaSearch} from "react-icons/fa";
 import axios from 'axios';
 import APIService from '../../api/ApiService';
 import { useParams } from 'react-router-dom';
+import BusinessReview from './BusinessReview';
 
 const Business = () => {
      
@@ -52,7 +53,7 @@ const Business = () => {
       return <div>Loading...</div>;
     }
   
-    return <div>
+    return (<div style={{ fontSize: '50px' }}>
             <div>{Name}</div>
             <div>State: {state}</div>
             <div>City:{City}</div>
@@ -62,7 +63,7 @@ const Business = () => {
             <div>Stars: {star}</div>
             <div> Operation Hours:</div>
            
-             <ul>
+            <ul>
             {
             Object.entries(hour).map(([day, time]) => {
               return (
@@ -70,11 +71,10 @@ const Business = () => {
                   {day}: {time}
                   </li>
             )})}
-            </ul>
+           </ul>
 
-
-            <div>Feature:</div>
-            <ul>
+          <div>Feature:</div>
+          <ul>
             {
             Object.entries(attr).map(([attr, yes]) => {
               if (yes == 'True'){
@@ -82,13 +82,20 @@ const Business = () => {
                   <li key={attr}>
                   {attr}
                   </li>
-            )
+                     )
               }
-          }
+            }
             )
             }
-            </ul>
-          </div>;
+          </ul>
+          
+          <div>
+            <BusinessReview Business_id = {BusId} />
+           
+          </div>
 
+            
+          </div>
+    )
   }
-  export default Business
+export default Business

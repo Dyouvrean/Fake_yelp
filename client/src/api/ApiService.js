@@ -38,6 +38,17 @@ export default class APIService{
         })
     }
 
+    static Get_business_review(body){
+        return axios.post(`http://localhost:5000/Business_review`,
+        JSON.stringify(body),
+        {
+            'method':'POST',
+             headers : {
+            'Content-Type':'application/json'
+            },
+      
+        })
+    }
 
 
 }
