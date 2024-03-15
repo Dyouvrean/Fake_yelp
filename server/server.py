@@ -99,7 +99,18 @@ def business_review():
     return merged_df.to_json(orient='records')
 
 
-
+@app.route("/user_info", methods=["POST","GET"])
+def user_info():
+    userID = request.json['UserId']
+    with sql.connect('yelp_dataset_users.db') as conn:
+        query = """
+            SELECT *
+            FROM users
+            WHERE user_id = ?
+            """
+    res = pd.read_sql(query, conn, params=(userID,))
+    print(res)
+    return res.to_json(orient='records')
 
 
 if __name__ == "__main__":

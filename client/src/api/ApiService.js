@@ -50,5 +50,16 @@ export default class APIService{
         })
     }
 
+    static Get_user_info(body){
+        return axios.post(`http://localhost:5000/user_info`,
+        JSON.stringify(body),
+        {
+            'method':'POST',
+             headers : {
+            'Content-Type':'application/json'
+            },
+      
+        })
+    }
 
 }
