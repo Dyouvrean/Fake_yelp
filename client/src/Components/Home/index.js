@@ -1,8 +1,11 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useStyles } from "./style";
 import { Link } from 'react-router-dom';
-
+import { FaStar } from "react-icons/fa";
 import {FaSearch} from "react-icons/fa";
+import { FaArrowUpWideShort } from "react-icons/fa6";
+import { FaArrowDownShortWide } from "react-icons/fa6";
+
 import "./Searchbar.css"
 import axios from 'axios';
 import APIService from '../../api/ApiService';
@@ -16,9 +19,9 @@ const Home = () => {
   const [loading,setload] = useState(true)
   const [business_list, setbusiness_list] = useState([])
   const [state,setstate] = useState("")
-  const [star,setstar] = useState("")
-
-
+  const [min,setmin] = useState("")
+  const [max,setmax] = useState("")
+  const [isAscending, setIsAscending] = useState(true);
 
   const send_partial =(value)=>{
     const data = {
@@ -43,24 +46,48 @@ const Home = () => {
   const handleState =(value)=>{
     setstate(value);
   }
-  const handleStar =(value)=>{
-    setstar(value);
+  const handleStarmin =(value)=>{
+    
+    setmin(value);
   }
+  const handleStarmax =(value)=>{
+    if (value > 5){
+      alert("The max star value is 5")
+    }
+    else{
+      setmax(value);
+    }
+    
+  }
+
   const handleSearch = async (event)=>{
     event.preventDefault();
     const data = {
       name: input,
       state: state,
-      star:star
+      starmax:max,
+      starmin: min
     };
     setInput("")
     setstate("")
-    setstar("")
+    setmin("")
+    setmax("")
     setopt({})
     return APIService.Search_bus(data).then((res)=>setbusiness_list(res.data));
 }
 
+const handleSort =() =>{
+  const sortedbusiness_list = [...business_list].sort((a, b) => {
+    if (isAscending) {
+      return a.stars-b.stars;
+    } else {
+      return b.stars-a.stars;
+    }
+  });
 
+  setIsAscending(!isAscending);
+  setbusiness_list(sortedbusiness_list);
+}
 
 
 
@@ -81,14 +108,20 @@ const Home = () => {
                onChange={(e)=>handleState(e.target.value)}
             />
             <input className={classes.input}
-               placeholder="Enter star" 
-               value={star}
-               onChange={(e)=>handleStar(e.target.value)}
+               placeholder="Enter star min" 
+               value={min}
+               onChange={(e)=>handleStarmin(e.target.value)}
+            />
+            <input className={classes.input}
+               placeholder="Enter star max" 
+               value={max}
+               onChange={(e)=>handleStarmax(e.target.value)}
             />
             <button type="submit" className={classes.button} onClick={handleSearch} >
                             Search
             </button>
          </div>
+
          <div className='results-list'>
             { 
                Object.entries(opt).sort((a, b) => a[1]-b[1]).map((result,id)=>{
@@ -96,6 +129,13 @@ const Home = () => {
             })
             }
           </div>
+          
+         <div className='filter-wrapper'>
+         <FaStar  onClick={handleSort}/> {isAscending ? <FaArrowUpWideShort/> : <FaArrowDownShortWide />}
+         </div>
+
+
+
           <div className='card-wrapper'>
           {business_list.map((result)=>{
             console.log(result.business_id)
