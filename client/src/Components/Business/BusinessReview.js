@@ -27,7 +27,7 @@ const BusinessReview = ({Business_id}) => {
            Review:
            </div>
            <div>
-           {reviewlist.map((result)=>{
+           {reviewlist.sort((a, b) => new Date(b.date) - new Date(a.date)).map((result)=>{
             console.log(result)
             return <ReviewCard info= {result}/>
           })
